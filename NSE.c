@@ -4,8 +4,11 @@
 //
 // ********************************************************************
 //
-#include "Globals.h"
+#include "Globals.h
+#include "InputOutput.h"
 #include "MemoryManager.h"
+#include "TimeEvolution.h"
+
 #include <stdio.h>
 
 int main(void) {
@@ -41,6 +44,9 @@ int main(void) {
   printf("Cells initialized to zero! \n");
 
   // Start of the time evolution loop
+  time_evolution(problem_type, inflow_vel, frequency, i_max, j_max, reynold, a_size, b_size,
+                tau_safety, omega_relax, epsilon_tolerance, max_iterations, g_accel, 
+                max_int_time, cell);
 
   // Deallocate the memory for the fields
   free_memory(&cell);
