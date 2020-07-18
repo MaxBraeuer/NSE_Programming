@@ -4,6 +4,7 @@
 //
 // ********************************************************************
 //
+#include "Globals.h"
 #include "MemoryManager.h"
 #include <stdio.h>
 

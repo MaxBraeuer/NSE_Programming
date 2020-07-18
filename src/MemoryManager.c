@@ -1,3 +1,4 @@
+#include "Globals.h"
 #include "MemoryManager.h"
 
 #include <stdlib.h>
