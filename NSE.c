@@ -27,6 +27,7 @@ int main(void) {
   double epsilon_tolerance;     // relative tolerance for the residual epsilon
   int max_iterations;           // maximum # of iterations for the SOR-loop
   double max_int_time;          // maximum allowed integration time
+  int max_int_steps;			// maximum allowed integration time steps
   Gravity g_accel;              // gravitational acceleration
   // simulation parameters
   SimulationGrid ** cell;       // 2D-Array simulation parameters
@@ -34,7 +35,7 @@ int main(void) {
   // Initialize the user parameters by parsing their values
   initialize_user_parameters(&problem_type, &inflow_vel, &frequency, &i_max, &j_max, &a_size, &b_size,
                             &g_accel, &reynold, &tau_safety, &omega_relax, &epsilon_tolerance,
-                            &max_iterations, &max_int_time);
+                            &max_iterations, &max_int_time, &max_int_steps);
 
   // Allocate memory for all fields
   allocate_memory(&cell, i_max, j_max);
@@ -46,7 +47,7 @@ int main(void) {
   // Start of the time evolution loop
   time_evolution(problem_type, inflow_vel, frequency, i_max, j_max, reynold, a_size, b_size,
                 tau_safety, omega_relax, epsilon_tolerance, max_iterations, g_accel, 
-                max_int_time, cell);
+                max_int_time, max_int_steps, cell);
 
   // Deallocate the memory for the fields
   free_memory(&cell);

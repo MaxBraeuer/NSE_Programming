@@ -22,18 +22,19 @@ static double search_min_double(int n_args, ...);
 void time_evolution(int problem_type, double inflow_vel, double frequency, int i_max, int j_max, 
                    double reynold, double a_size, double b_size, double tau_safety, double omega_relax, 
                    double epsilon_tolerance, int max_iterations, Gravity g_accel, 
-                   double max_int_time, SimulationGrid **cell) {
+                   double max_int_time, int max_int_steps, SimulationGrid **cell) {
 					 
   // Declare some new needed variables
   double vel_u_max_abs, vel_v_max_abs;  // maximum velocity components (absolute value)
   double gamma_weight;                  // factor for donor-cell-stencil weighing
   double delta_time;                    // size of the timestep
   double int_time = 0.0;                // initialize the integration time  
+  int time_step_number = 1;				// initialize the time step number
   double delta_x = a_size / i_max;      // cell size in x-direction
   double delta_y = b_size / j_max;      // cell size in y-direction
   double reynold_stability_condition = reynold / (2.0 * ((1.0 / (delta_x * delta_x)) + (1.0 / (delta_y * delta_y))));
   
-  while (int_time < max_int_time) {
+  while (int_time < max_int_time && time_step_number <= max_int_steps) {
     // calculate adaptive size of the timestep to ensure a stable simulation: eq. (26)
     vel_u_max_abs = search_max_vel_u(cell, i_max, j_max);
     vel_v_max_abs = search_max_vel_v(cell, i_max, j_max);
@@ -71,9 +72,12 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
     // increment the integration time by the size of the adaptive timestep
     int_time += delta_time;
     printf("Integration time elapsed: %lg / %lg \n", int_time, max_int_time);
+	printf("Time steps done: %d / %d \n", time_step_number, max_int_steps);
 
     // export the cells
 	//
+	
+	time_step_number += 1;
 
   }
 }

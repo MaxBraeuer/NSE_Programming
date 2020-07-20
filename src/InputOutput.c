@@ -8,7 +8,7 @@
 void initialize_user_parameters(int *problem_type,double *inflow_vel, double *frequency, int *i_max, int *j_max, 
                                 double *a_size, double *b_size, Gravity *g_accel, double *reynold,
                                 double *tau_safety, double *omega_relax, double *epsilon_tolerance,
-                                int *max_iterations, double *max_int_time) {
+                                int *max_iterations, double *max_int_time, int *max_int_steps) {
   char buffer[256];
 
   FILE* input_file;
@@ -67,6 +67,9 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
 
   fgets(buffer, 256, input_file);
   sscanf(buffer, "%lg", max_int_time);
+  
+  fgets(buffer, 256, input_file);
+  sscanf(buffer, "%d", max_int_steps);
   
   fclose(input_file);
 
