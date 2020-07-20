@@ -75,8 +75,33 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
 
 }
 
-/*
-void export_cells() {
+void export_cells(SimulationGrid **cell, int i_max, int j_max, int current_time_step_number, double current_int_time) {
+  
+  char filename_u[32];
+  char filename_v[32];
+  char filename_p[32];
+
+  sprintf(filename_u, "output/u_%d.txt", current_time_step_number);
+  sprintf(filename_v, "output/v_%d.txt", current_time_step_number);
+  sprintf(filename_p, "output/p_%d.txt", current_time_step_number);
+  
+  FILE *out_vel_u, *out_vel_v, *out_pressure;
+
+  out_vel_u = fopen(file_u, "w");
+  out_vel_v = fopen(file_v, "w");
+  out_pressure = fopen(file_p, "w");
+  
+  // write the array contents row by row to the text files
+  for (int i = 0; i <= i_max + 1; i++) {
+    for (int j = 0; j <= j_max + 1; j++) {
+      fprintf(out_vel_u, "%lg\n", cell[i][j].vel_u);
+      fprintf(out_vel_v, "%lg\n", cell[i][j].vel_v);
+      fprintf(out_pressure, "%lg\n", cell[i][j].pressure);
+    }
+  }
+
+  fclose(out_vel_u);
+  fclose(out_vel_v);
+  fclose(out_pressure);
 }
-*/
 

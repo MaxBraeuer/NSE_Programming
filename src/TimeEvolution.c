@@ -75,7 +75,7 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
 	printf("Time steps done: %d / %d \n", time_step_number, max_int_steps);
 
     // export the cells
-	//
+	export_cells(cell, i_max, j_max, time_step_number, int_time);
 	
 	time_step_number += 1;
 
