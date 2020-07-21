@@ -48,11 +48,17 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
 
     // implement boundary conditions: eq. (8-10)
     // the right, left and bottom boundaries are set using the no-slip condition
-	//
-
-    // the top boundary is set using the inflow condition;
+	no_slip_condition(cell, i_max, j_max, 'r');
+    no_slip_condition(cell, i_max, j_max, 'l');
+    no_slip_condition(cell, i_max, j_max, 'b');
+    
+	// the top boundary is set using the inflow condition;
     // depending on the problem type the velocity x-component is either constant or varies 
-	//
+	if (problem_type == 0) {
+      inflow_condition(cell, i_max, j_max, inflow_vel, 0.0, 't');
+    } else if (problem_type == 1) {
+        inflow_condition(cell, i_max, j_max, inflow_vel * sin(frequency * int_time), 0.0, 't');
+    }
 
     // calculate F and G: eq. (29-30)
     gamma_weight = fmax(vel_u_max_abs * delta_time / delta_x, vel_v_max_abs * delta_time / delta_y);
