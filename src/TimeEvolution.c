@@ -39,8 +39,8 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
     vel_u_max_abs = search_max_vel_u(cell, i_max, j_max);
     vel_v_max_abs = search_max_vel_v(cell, i_max, j_max);
 
-	// Catch a possible division by zero. C doesn't really care but just to be on the safe side
-	if (vel_u_max_abs == 0 || vel_v_max_abs == 0) {
+    // Catch a possible division by zero. C doesn't really care but just to be on the safe side
+    if (vel_u_max_abs == 0 || vel_v_max_abs == 0) {
       delta_time = tau_safety * reynold_stability_condition;
     } else {
       delta_time = tau_safety * search_min_double(3, reynold_stability_condition, delta_x / vel_u_max_abs, delta_y / vel_v_max_abs);
@@ -48,13 +48,13 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
 
     // implement boundary conditions: eq. (8-10)
     // the right, left and bottom boundaries are set using the no-slip condition
-	no_slip_condition(cell, i_max, j_max, 'r');
+    no_slip_condition(cell, i_max, j_max, 'r');
     no_slip_condition(cell, i_max, j_max, 'l');
     no_slip_condition(cell, i_max, j_max, 'b');
     
-	// the top boundary is set using the inflow condition;
+    // the top boundary is set using the inflow condition;
     // depending on the problem type the velocity x-component is either constant or varies 
-	if (problem_type == 0) {
+    if (problem_type == 0) {
       inflow_condition(cell, i_max, j_max, inflow_vel, 0.0, 't');
     } else if (problem_type == 1) {
         inflow_condition(cell, i_max, j_max, inflow_vel * sin(frequency * int_time), 0.0, 't');
@@ -78,12 +78,12 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
     // increment the integration time by the size of the adaptive timestep
     int_time += delta_time;
     printf("Integration time elapsed: %lg / %lg \n", int_time, max_int_time);
-	printf("Time steps done: %d / %d \n", time_step_number, max_int_steps);
+    printf("Time steps done: %d / %d \n", time_step_number, max_int_steps);
 
     // export the cells
-	export_cells(cell, i_max, j_max, time_step_number, int_time);
+    export_cells(cell, i_max, j_max, time_step_number, int_time);
 	
-	time_step_number += 1;
+    time_step_number += 1;
 
   }
 }
