@@ -8,7 +8,7 @@
 void initialize_user_parameters(int *problem_type,double *inflow_vel, double *frequency, int *i_max, int *j_max,
                                double *a_size, double *b_size, Gravity *g_accel, double *reynold,
                                double *tau_safety, double *omega_relax, double *epsilon_tolerance,
-                               int *max_iterations, double *max_int_time) {
+                               int *max_iterations, double *max_int_time, int *max_int_steps) {
  char buffer[256];
  int error_count = 0;
 
@@ -111,7 +111,14 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
  fgets(buffer, 256, input_file);
  sscanf(buffer, "%lg", max_int_time);
  if (*max_int_time <= 0.0) {
-   fprintf(stderr, "Error in 'UserInput.txt': The integration time has to be greater than zero.\n");
+   fprintf(stderr, "Error in 'UserInput.txt': The maximum integration time has to be greater than zero.\n");
+   error_count += 1;
+ }
+ 
+ fgets(buffer, 256, input_file);
+ sscanf(buffer, "%d", max_int_steps);
+ if (*max_int_steps <= 0) {
+   fprintf(stderr, "Error in 'UserInput.txt': The number of maximum integration steps has to be an integer greater than zero.\n");
    error_count += 1;
  }
 
@@ -122,21 +129,21 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
  }
 }
 
-void export_cells(SimulationGrid **cell, int i_max, int j_max, int step_number, double current_int_time) {
+void export_cells(SimulationGrid **cell, int i_max, int j_max, int current_time_step_number, double current_int_time) {
 
- char file_u[32];
- char file_v[32];
- char file_p[32];
+ char filename_u[32];
+ char filename_v[32];
+ char filename_p[32];
 
- sprintf(file_u, "output/u_%d.txt", step_number);
- sprintf(file_v, "output/v_%d.txt", step_number);
- sprintf(file_p, "output/p_%d.txt", step_number);
+ sprintf(filename_u, "output/u_%d.txt", current_time_step_number);
+ sprintf(filename_v, "output/v_%d.txt", current_time_step_number);
+ sprintf(filename_p, "output/p_%d.txt", current_time_step_number);
 
  FILE *out_vel_u, *out_vel_v, *out_pressure;
 
- out_vel_u = fopen(file_u, "w");
- out_vel_v = fopen(file_v, "w");
- out_pressure = fopen(file_p, "w");
+ out_vel_u = fopen(filename_u, "w");
+ out_vel_v = fopen(filename_v, "w");
+ out_pressure = fopen(filename_p, "w");
 
  // error if the folder output/ does not exist
  if (out_vel_u == NULL || out_vel_v == NULL || out_pressure == NULL) {
