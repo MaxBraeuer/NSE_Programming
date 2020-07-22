@@ -5,36 +5,50 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// linear derivative of the pressure with respect to x
 static double dp_dx(SimulationGrid **cell, int i, int j, double delta_x);
 
+// linear derivative of the pressure with respect to y
 static double dp_dy(SimulationGrid **cell, int i, int j, double delta_y);
 
+// second linear derivative of u (velocity x-component) with respect to x, calculated by standard central difference
 static double d2u_dx2(SimulationGrid **cell, int i, int j, double delta_x);
 
+// second linear derivative of u (velocity x-component) with respect to y, calculated by standard central difference
 static double d2u_dy2(SimulationGrid **cell, int i, int j, double delta_y);
 
+// second linear derivative of v (velocity y-component) with respect to x, calculated by standard central difference
 static double d2v_dx2(SimulationGrid **cell, int i, int j, double delta_x);
 
+// second linear derivative of v (velocity y-component) with respect to y, calculated by standard central difference
 static double d2v_dy2(SimulationGrid **cell, int i, int j, double delta_y);
 
+// nonlinear derivative of u^2 (velocity x-component) with respect to x, calculated by a linear combination of central differences and so called donor-cell stencils
 static double du2_dx(SimulationGrid **cell, int i, int j, double delta_x, double gamma_weight);
 
+// nonlinear derivative of u*v with respect to y, calculated by a linear combination of central differences and so called donor-cell stencils
 static double duv_dy(SimulationGrid **cell, int i, int j, double delta_y, double gamma_weight);
 
+// nonlinear derivative of v^2 (velocity y-component) with respect to y, calculated by a linear combination of central differences and so called donor-cell stencils
 static double dv2_dy(SimulationGrid **cell, int i, int j, double delta_y, double gamma_weight);
 
+// nonlinear derivative of u*v with respect to x, calculated by a linear combination of central differences and so called donor-cell stencils
 static double duv_dx(SimulationGrid **cell, int i, int j, double delta_x, double gamma_weight);
 
+// calculates the pressure according to eq. (42)
 static void calculate_pressures(SimulationGrid **cell, int i_max, int j_max, double delta_x, double delta_y, double omega_relax);
 
+// Calculates the residual according to eq. (43)
 static void calculate_residuals(SimulationGrid **cell, int i_max, int j_max, double delta_x, double delta_y);
 
+// calculates the discrete L2-norm of the residuals or the pressures (mode 'r' for the residual, mode 'p' for pressure)
 static double L2_norm(SimulationGrid **cell, int i_max, int j_max, char mode);
 
 
 void calculate_F_G(SimulationGrid **cell, int i_max, int j_max, double delta_x,
                   double delta_y, double delta_time, double reynold, double gamma_weight, Gravity g_accel) {
 
+  // F:
   for (int i = 1; i <= i_max - 1; i++) {
     for (int j = 1; j <= j_max; j++) {
       cell[i][j].F_term = cell[i][j].vel_u + delta_time *
@@ -43,6 +57,7 @@ void calculate_F_G(SimulationGrid **cell, int i_max, int j_max, double delta_x,
 	}
   }
 
+  // G:
   for (int i = 1; i <= i_max; i++) {
     for (int j = 1; j <= j_max - 1; j++) {
       cell[i][j].G_term = cell[i][j].vel_v + delta_time *
@@ -66,6 +81,7 @@ void sor_loop(SimulationGrid **cell, int i_max, int j_max, double delta_x, doubl
   int i, j;
   double pressure_L2_norm_before_sor_step = L2_norm(cell, i_max, j_max, 'p');
   while (count < max_iterations) {
+    // fill the boundary cells by copying the old pressure values from the neighbouring cells
     for (i = 1; i <= i_max; i++) {
       cell[i][0].pressure = cell[i][1].pressure;
       cell[i][j_max + 1].pressure = cell[i][j_max].pressure;
@@ -75,9 +91,11 @@ void sor_loop(SimulationGrid **cell, int i_max, int j_max, double delta_x, doubl
       cell[i_max + 1][j].pressure = cell[i_max][j].pressure;
     }
 
+    // calculate the pressure and residuals for all the other cells
     calculate_pressures(cell, i_max, j_max, delta_x, delta_y, omega_relax);
     calculate_residuals(cell, i_max, j_max, delta_x, delta_y);
 
+    // stop the iteration if the norm of the residual falls below a specified error tolerance
     if (L2_norm(cell, i_max, j_max, 'r') < epsilon_tolerance * pressure_L2_norm_before_sor_step) {
       printf("SOR converged after %d iterations.\n", count + 1);
       return;
@@ -85,23 +103,37 @@ void sor_loop(SimulationGrid **cell, int i_max, int j_max, double delta_x, doubl
 
     count++;
   }
+
+  // if the maximum number of iterations gets exceeded throw a warning
+  printf("SOR did not converge! Maximum number of iterations exceeded! If this message appears multiple times consider setting a higher maximum or a bigger epsilon. \n");
 }
 
 
 void calculate_velocities(SimulationGrid **cell, int i_max, int j_max, double delta_time, double delta_x, double delta_y) {
 
+  // vel_u
   for (int i = 1; i <= i_max - 1; i++) {
     for (int j = 1; j <= j_max; j++) {
       cell[i][j].vel_u = cell[i][j].F_term - delta_time * dp_dx(cell, i, j, delta_x);
 
+	  // if the velocity component is nan or +/-inf raise an error
+	  if (!isfinite(cell[i][j].vel_u)) {
+        fprintf(stderr, "Error while updating the velocites. Something went wrong. \n");
+        exit(EXIT_FAILURE);
 	  }
 	}
   }
 
+  // vel_v
   for (int i = 1; i <= i_max; i++) {
 	for (int j = 1; j <= j_max - 1; j++) {
       cell[i][j].vel_v = cell[i][j].G_term - delta_time * dp_dy(cell, i, j, delta_y);
 
+	  // if the velocity component is nan or +/-inf raise an error
+	  if (!isfinite(cell[i][j].vel_v)) {
+        fprintf(stderr, "Error while updating the velocites. Something went wrong. \n");
+        exit(EXIT_FAILURE);
+	  }
 	}
   }
 }
