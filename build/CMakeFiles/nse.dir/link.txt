@@ -1,0 +1,1 @@
+/usr/bin/cc -Wall -Wextra -Os -lm  -rdynamic CMakeFiles/nse.dir/NSE.c.o CMakeFiles/nse.dir/src/BoundaryConditions.c.o CMakeFiles/nse.dir/src/InputOutput.c.o CMakeFiles/nse.dir/src/MainCalculations.c.o CMakeFiles/nse.dir/src/MemoryManager.c.o CMakeFiles/nse.dir/src/TimeEvolution.c.o  -o nse 

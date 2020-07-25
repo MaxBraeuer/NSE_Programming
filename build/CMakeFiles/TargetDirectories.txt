@@ -1,0 +1,3 @@
+/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/build/CMakeFiles/edit_cache.dir
+/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/build/CMakeFiles/rebuild_cache.dir
+/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/build/CMakeFiles/nse.dir

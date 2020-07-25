@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "BoundaryConditions.h"
-
+#include <math.h>
+#include <stdio.h>
 // No-Slip condition (essentially inflow condition with both velocity components set to zero)
 void no_slip_condition(SimulationGrid **cell, int i_max, int j_max, char boundary) {
   inflow_condition(cell, i_max, j_max, 0, 0, boundary);
@@ -31,6 +32,10 @@ void inflow_condition(SimulationGrid **cell, int i_max, int j_max, double inflow
       for (int i = 1; i <= i_max; i++) {
         cell[i][j_max + 1].vel_u = 2 * inflow_vel_x - cell[i][j_max].vel_u;
         cell[i][j_max].vel_v = inflow_vel_y;
+      }
+      printf("Nice");
+      for (int i = 0; i <= i_max+1; i++){
+        cell[i][j_max + 1].pressure = sin(M_PI*i/i_max)*sinh(M_PI);
       }
       break;
   }

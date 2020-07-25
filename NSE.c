@@ -4,7 +4,7 @@
 //
 // ********************************************************************
 //
-#include "Globals.h
+#include "Globals.h"
 #include "InputOutput.h"
 #include "MemoryManager.h"
 #include "TimeEvolution.h"
@@ -46,7 +46,7 @@ int main(void) {
 
   // Start of the time evolution loop
   time_evolution(problem_type, inflow_vel, frequency, i_max, j_max, reynold, a_size, b_size,
-                tau_safety, omega_relax, epsilon_tolerance, max_iterations, g_accel, 
+                tau_safety, omega_relax, epsilon_tolerance, max_iterations, g_accel,
                 max_int_time, max_int_steps, cell);
 
   // Deallocate the memory for the fields

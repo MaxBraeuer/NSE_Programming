@@ -105,7 +105,7 @@ void sor_loop(SimulationGrid **cell, int i_max, int j_max, double delta_x, doubl
   }
 
   // if the maximum number of iterations gets exceeded throw a warning
-  printf("SOR did not converge! Maximum number of iterations exceeded! If this message appears multiple times consider setting a higher maximum or a bigger epsilon. \n");
+  printf("SOR did not converge! M%f >= %f\n",L2_norm(cell, i_max, j_max, 'r'),epsilon_tolerance * pressure_L2_norm_before_sor_step);
 }
 
 

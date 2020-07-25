@@ -114,7 +114,7 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
    fprintf(stderr, "Error in 'UserInput.txt': The maximum integration time has to be greater than zero.\n");
    error_count += 1;
  }
- 
+
  fgets(buffer, 256, input_file);
  sscanf(buffer, "%d", max_int_steps);
  if (*max_int_steps <= 0) {
@@ -130,7 +130,7 @@ void initialize_user_parameters(int *problem_type,double *inflow_vel, double *fr
 }
 
 void export_cells(SimulationGrid **cell, int i_max, int j_max, int current_time_step_number, double current_int_time) {
-
+printf("time %d\n", current_time_step_number);
  char filename_u[32];
  char filename_v[32];
  char filename_p[32];
