@@ -30,21 +30,21 @@ fig = plt.figure(1, [10, 10])
 ax = fig.gca()
 # Colormap + Colorbar
 cmap = mpl.cm.get_cmap('magma')
-norm = BoundaryNorm(np.linspace(0, 12, 10), cmap.N);
+norm = BoundaryNorm(np.linspace(0, 10, 10), cmap.N);
 presplot = ax.imshow(pressure, norm = norm, origin = "lower", cmap=cmap)
 bar = fig.colorbar(presplot)
 presplot.set_data(pressure)
-pressure = np.zeros((num,num))
+
 """
-# check
+# check with analytical solution
+pressure = np.zeros((num,num))
 x = np.linspace(-0.01, 1.01, 102)
 y = np.linspace(-0.01, 1.01, 102)
 X, Y = np.meshgrid(x, y)
 pressure=np.sin(np.pi*X)*np.sinh(np.pi*Y)
 presplot.set_data(pressure)
+
 """
-
-
 plt.xlabel(r'$x$ direction')
 plt.ylabel(r"$y$ direction")
 plt.title(r"Pressure in the box")

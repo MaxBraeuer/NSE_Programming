@@ -190,8 +190,8 @@ static double duv_dx(SimulationGrid **cell, int i, int j, double delta_x, double
 }
 
 static void calculate_pressures(SimulationGrid **cell, int i_max, int j_max, double delta_x, double delta_y, double omega_relax) {
-  for (int i = 1+1; i <= i_max-1; i++) {
-    for (int j = 1+1; j <= j_max-1; j++) {
+  for (int i = 2; i <= i_max-1; i++) {
+    for (int j = 2; j <= j_max-1; j++) {
       cell[i][j].pressure = (1.0 - omega_relax) * cell[i][j].pressure + omega_relax / (2.0 * ((1.0 / (delta_x * delta_x)) + (1.0 / (delta_y * delta_y)))) *
             ((cell[i+1][j].pressure + cell[i-1][j].pressure) / (delta_x * delta_x) +
             (cell[i][j+1].pressure + cell[i][j-1].pressure) / (delta_y * delta_y)  - cell[i][j].poisson_rhs);

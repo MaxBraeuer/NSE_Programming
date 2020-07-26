@@ -6,19 +6,17 @@
 
 #IncludeRegexTransform: 
 
+../include/BoundaryConditions.h
+
 ../include/Globals.h
 
-../include/MainCalculations.h
-
-/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/src/MainCalculations.c
+/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/src/BoundaryConditions.c
 Globals.h
 /home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/src/Globals.h
-MainCalculations.h
-/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/src/MainCalculations.h
+BoundaryConditions.h
+/home/max/Schreibtisch/SS20/Fortgeschrittenenpraktikum/Navier-Stokes-Gleichungen/NSE_Programming/src/BoundaryConditions.h
 math.h
 -
 stdio.h
--
-stdlib.h
 -
 
