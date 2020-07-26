@@ -34,8 +34,10 @@ void inflow_condition(SimulationGrid **cell, int i_max, int j_max, double inflow
         cell[i][j_max].vel_v = inflow_vel_y;
       }
       printf("Nice");
-      for (int i = 0; i <= i_max+1; i++){
-        cell[i][j_max + 1].pressure = sin(M_PI*i/i_max)*sinh(M_PI);
+      for (int i = 1; i <= i_max; i++){
+        // cell[i][j_max].pressure = 1.0;
+        // cell[i][0].pressure = 1.0;
+        cell[i][j_max].pressure=sin(M_PI*i/i_max)*sinh(M_PI);
       }
       break;
   }

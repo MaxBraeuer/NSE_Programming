@@ -34,6 +34,17 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
   double delta_y = b_size / j_max;      // cell size in y-direction
   double reynold_stability_condition = reynold / (2.0 * ((1.0 / (delta_x * delta_x)) + (1.0 / (delta_y * delta_y))));
 
+  no_slip_condition(cell, i_max, j_max, 'r');
+  no_slip_condition(cell, i_max, j_max, 'l');
+  no_slip_condition(cell, i_max, j_max, 'b');
+
+  // the top boundary is set using the inflow condition;
+  // depending on the problem type the velocity x-component is either constant or varies
+  if (problem_type == 0) {
+    inflow_condition(cell, i_max, j_max, inflow_vel, 0.0, 't');
+  } else if (problem_type == 1) {
+    inflow_condition(cell, i_max, j_max, inflow_vel * sin(frequency * int_time), 0.0, 't');
+  }
   while (int_time < max_int_time && time_step_number <= max_int_steps) {
     // calculate adaptive size of the timestep to ensure a stable simulation: eq. (26)
     vel_u_max_abs = search_max_vel_u(cell, i_max, j_max);
@@ -48,33 +59,22 @@ void time_evolution(int problem_type, double inflow_vel, double frequency, int i
 
     // implement boundary conditions: eq. (8-10)
     // the right, left and bottom boundaries are set using the no-slip condition
-    no_slip_condition(cell, i_max, j_max, 'r');
-    no_slip_condition(cell, i_max, j_max, 'l');
-    no_slip_condition(cell, i_max, j_max, 'b');
-
-    // the top boundary is set using the inflow condition;
-    // depending on the problem type the velocity x-component is either constant or varies
-    if (problem_type == 0) {
-      inflow_condition(cell, i_max, j_max, inflow_vel, 0.0, 't');
-    } else if (problem_type == 1) {
-        inflow_condition(cell, i_max, j_max, inflow_vel * sin(frequency * int_time), 0.0, 't');
-    }
     export_cells(cell, i_max, j_max, time_step_number-1, int_time);
 
     // calculate F and G: eq. (29-30)
     gamma_weight = fmax(vel_u_max_abs * delta_time / delta_x, vel_v_max_abs * delta_time / delta_y);
 
-    calculate_F_G(cell, i_max, j_max, delta_x, delta_y, delta_time, reynold, gamma_weight, g_accel);
+    // calculate_F_G(cell, i_max, j_max, delta_x, delta_y, delta_time, reynold, gamma_weight, g_accel);
 
     // Calculate the RHS of the pressure eq. (40)
-    rhs_pressure(cell, i_max, j_max, delta_time, delta_x, delta_y);
+    // rhs_pressure(cell, i_max, j_max, delta_time, delta_x, delta_y);
 
     // begin SOR-loop
     sor_loop(cell, i_max, j_max, delta_x, delta_y, omega_relax, epsilon_tolerance, max_iterations);
 
     // calculate new velocity components u_vel and v_vel: eq. (21-22)
-    calculate_velocities(cell, i_max, j_max, delta_time, delta_x, delta_y);
-    printf("Velocities updated!\n");
+    // calculate_velocities(cell, i_max, j_max, delta_time, delta_x, delta_y);
+    // printf("Velocities updated!\n");
 
     // increment the integration time by the size of the adaptive timestep
     int_time += delta_time;
