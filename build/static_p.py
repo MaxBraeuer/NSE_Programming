@@ -8,6 +8,10 @@ import numpy as np
 import re
 import glob
 
+# LaTeX style output
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans')
+
 # sort the files naturally
 def natural_sort(l):
     convert = lambda text: int(text) if text.isdigit() else text.lower()
@@ -30,22 +34,23 @@ fig = plt.figure(1, [10, 10])
 ax = fig.gca()
 # Colormap + Colorbar
 cmap = mpl.cm.get_cmap('magma')
-norm = BoundaryNorm(np.linspace(0, 10, 10), cmap.N);
+norm = BoundaryNorm(np.linspace(0, 10, 11), cmap.N);
 presplot = ax.imshow(pressure, norm = norm, origin = "lower", cmap=cmap)
 bar = fig.colorbar(presplot)
 presplot.set_data(pressure)
 
-"""
 # check with analytical solution
 pressure = np.zeros((num,num))
 x = np.linspace(-0.01, 1.01, 102)
 y = np.linspace(-0.01, 1.01, 102)
 X, Y = np.meshgrid(x, y)
-pressure=np.sin(np.pi*X)*np.sinh(np.pi*Y)
+pressure=np.sin(np.pi*Y)*np.sinh(np.pi*X)
 presplot.set_data(pressure)
 
 """
-plt.xlabel(r'$x$ direction')
-plt.ylabel(r"$y$ direction")
-plt.title(r"Pressure in the box")
-plt.show()
+"""
+plt.xlabel(r'$x$ Richtung')
+plt.ylabel(r"$y$ Richtung")
+plt.title(r"Druckprofil im Inneren der Box.")
+# plt.show()
+plt.savefig("1,5_sol.pdf")
