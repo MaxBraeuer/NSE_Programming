@@ -10,7 +10,7 @@ import glob
 
 # LaTeX style output
 plt.rc('text', usetex=True)
-plt.rc('font', family='sans')
+plt.rc('font', family='sans',size= 20)
 
 # sort the files naturally
 def natural_sort(l):
@@ -38,6 +38,7 @@ norm = BoundaryNorm(np.linspace(0, 10, 11), cmap.N);
 presplot = ax.imshow(pressure, norm = norm, origin = "lower", cmap=cmap)
 bar = fig.colorbar(presplot)
 presplot.set_data(pressure)
+"""
 
 # check with analytical solution
 pressure = np.zeros((num,num))
@@ -48,9 +49,8 @@ pressure=np.sin(np.pi*Y)*np.sinh(np.pi*X)
 presplot.set_data(pressure)
 
 """
-"""
 plt.xlabel(r'$x$ Richtung')
 plt.ylabel(r"$y$ Richtung")
 plt.title(r"Druckprofil im Inneren der Box.")
 # plt.show()
-plt.savefig("1,5_sol.pdf")
+plt.savefig("1,0_sol.pdf")
