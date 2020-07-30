@@ -11,8 +11,8 @@ import glob
 from skimage.transform import resize
 
 # LaTeX style output
-# plt.rc('text', usetex=True)
-# plt.rc('font', family='sans')
+plt.rc('text', usetex=True)
+plt.rc('font', family='sans',size=20)
 
 # for mp4 output
 # Writer = animation.writers['ffmpeg']
@@ -28,6 +28,7 @@ def natural_sort(l):
 filelist =glob.glob("output/*.txt")
 dre = re.compile(r'(\d+)')
 filelist.sort(key=lambda l: [int(s) if s.isdigit() else s.lower() for s in re.split(dre, l)])
+uvend=int(len(filelist)/3)
 ufilelist=filelist[int(len(filelist)/3):2*int(len(filelist)/3)]
 vfilelist=filelist[2*int(len(filelist)/3)::]
 
@@ -41,12 +42,12 @@ fig = plt.figure(1, [10, 10])
 ax = fig.gca()
 # Colormap + Colorbar
 cmap = mpl.cm.get_cmap('magma')
-norm = BoundaryNorm(np.linspace(-1, 1, 10), cmap.N);
+norm = BoundaryNorm(np.linspace(0, 1, 10), cmap.N);
 uvplot = ax.imshow(velo_abs, norm = norm, origin = "lower", cmap=cmap)
 bar = fig.colorbar(uvplot)
 X, Y = np.mgrid[0:100:10j, 0:100:10j]
 print(X)
-velo_vec = ax.quiver(Y, X, Y, X, scale=1.0, color="white")
+velo_vec = ax.quiver(Y, X, Y, X, scale=2.0, color="white")
 
 # # TEST:get current data points
 # def get_data_abs_test(i):
@@ -83,12 +84,21 @@ def animate(i):
     velo_vec.set_UVC(u_res,v_res)
 
     return uvplot, velo_vec
+
+# Static Plot of last data
+velo_abs=get_data_abs(uvend-1)
+uvplot.set_data(velo_abs)
+u_res,v_res=get_data_vec(uvend-1)
+velo_vec.set_UVC(u_res,v_res)
+"""
+# Animation Plot
 ani = animation.FuncAnimation(
     fig, animate,frames=fn, init_func=init, interval=10, blit=True)
-
+"""
 plt.xlabel(r'$x$ direction')
 plt.ylabel(r"$y$ direction")
 plt.title(r"Velocities in the box")
+plt.savefig("uv_10000.pdf")
 plt.show()
 # To save the clip
 # ani.save('im.mp4', writer=writer)
