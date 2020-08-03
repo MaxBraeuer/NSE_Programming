@@ -1,6 +1,6 @@
 # Numerical Solution of the Navier-Stokes Equations
 
-*Einleitende Beschreibung*
+First topic of the advanced-lab-course in summer term 2020. We want to simulate and visualize a cavity flow via the famous Navier-Stokes equations using the finite difference method. 
 
 ## Building and Running
 
@@ -36,5 +36,4 @@ Uses CMake for out-of-place builds with a build environment of your choice. This
 User configurable variables can be set post-build by editing the file `UserInput.txt` *located within the build-directory.*
 
 ## Results
-
-...
+Check this [directory](plotting/final_states_and_videos/) to look at the produced graphs and videos.
