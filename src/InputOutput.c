@@ -151,12 +151,12 @@ void export_cells(SimulationGrid **cell, int i_max, int j_max, int current_time_
    exit(EXIT_FAILURE);
  }
 
- // write the array contents row by row to the text files
- for (int i = 0; i <= i_max + 1; i++) {
-   for (int j = 0; j <= j_max + 1; j++) {
-     fprintf(out_vel_u, "%lg\n", cell[j][i].vel_u);
-     fprintf(out_vel_v, "%lg\n", cell[j][i].vel_v);
-     fprintf(out_pressure, "%lg\n", cell[j][i].pressure);
+ // write the array contents column by column to the text file
+ for (int j = 0; j <= j_max + 1; j++) {
+   for (int i = 0; i <= i_max + 1; i++) {
+     fprintf(out_vel_u, "%lg\n", cell[i][j].vel_u);
+     fprintf(out_vel_v, "%lg\n", cell[i][j].vel_v);
+     fprintf(out_pressure, "%lg\n", cell[i][j].pressure);
    }
  }
 
