@@ -8,6 +8,9 @@ import numpy as np
 from numpy import linalg as LA
 from skimage.transform import resize
 
+plt.rc('font', family='sans',size=20)
+
+
 uf1="final_states_and_videos/global_convergence/50x50/u_822.txt"
 vf1="final_states_and_videos/global_convergence/50x50/v_822.txt"
 uf2="final_states_and_videos/global_convergence/100x100/u_2018.txt"
@@ -32,19 +35,25 @@ v3=v3[::4,::4]
 # print(u2-u1)
 fig = plt.figure(1,[10,10])
 ax = fig.gca()
-index1=np.arange(0,sz-2,1)
-index2=np.arange(0,sz-2,1)
-index1,index2=np.meshgrid(index1,index2)
-print(u3[index1,index2])
-test=np.log2((u3[index1,index2]-u2[index1,index2])/(u2[index1,index2]-u1[index1,index2]))
+# index2=np.arange(0,sz-2,1)
+# index1=np.arange(0,sz-2,1)
+# index1,index2=np.meshgrid(index1,index2)
+# print(u3[index1,index2])
+# test=np.log2((u3[index1,index2]-u2[index1,index2])/(u2[index1,index2]-u1[index1,index2]))
 # n=LA.norm(u2-u1)
 # z=LA.norm(u3-u2)
+test = np.log2(np.abs((u3-u2)/(u2-u1)))
 cmap = mpl.cm.get_cmap('magma')
-norm = BoundaryNorm(np.linspace(0, 4, 10), cmap.N);
+norm = BoundaryNorm(np.linspace(0, 4, 41), cmap.N);
 uvplot = ax.imshow(np.abs(test), norm = norm, origin = "lower", cmap=cmap)
 bar = fig.colorbar(uvplot)
-plt.show()
 print(1/50*np.sqrt(np.nansum(np.square(test))))
+
+plt.xlabel(r'$x$ direction')
+plt.ylabel(r"$y$ direction")
+plt.title(r"Spatial Convergence Order")
+plt.savefig("conv_order.pdf")
+plt.show()
 # print(n)
 # print(z)
 """
